@@ -19,9 +19,11 @@ const User = sequelize.define('User', {
   created_at: {
     type: DataTypes.DATE,
     allowNull: false,
+    defaultValue: DataTypes.NOW,
   },
 }, {
   timestamps: false,
+  tableName: 'users', // Nombre explícito de la tabla en la base de datos
 });
 
 module.exports = User;
