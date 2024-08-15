@@ -8,7 +8,7 @@ const sequelize = require('./config/database'); // Importa la configuración de 
 const { User, Message } = require('./models');  // Importa los modelos
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 80;
 
 app.use(cors());
 app.use(bodyParser.json());
