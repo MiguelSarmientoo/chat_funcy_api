@@ -1,26 +1,10 @@
-// routes/user.js
 const express = require('express');
 const router = express.Router();
 const userController = require('../controllers/userController');
+const { verifyToken } = require('../middleware/authMiddleware'); // Importamos el middleware de autenticación
 
-router.post('/login', async (req, res) => {
-  const { username, password } = req.body;
-
-  try {
-    const user = await userController.getUserByUsernameAndPassword(username, password);
-
-    if (user) {
-      res.status(200).json({ message: 'Login exitoso', user });
-    } else {
-      res.status(401).json({ error: 'Credenciales inválidas' });
-    }
-  } catch (error) {
-    console.error('Error en el login:', error);
-    res.status(500).json({ error: 'Error interno del servidor' });
-  }
-});
-
+router.post('/login', userController.login); // Usamos el controlador login
 router.post('/crearUsuario', userController.createUser);
-router.get('/users', userController.getAllUsers);
+router.get('/users', verifyToken, userController.getAllUsers); // Esta ruta está protegida por el middleware de token
 
 module.exports = router;

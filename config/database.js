@@ -1,12 +1,13 @@
-// const { Sequelize } = require('sequelize');
+const { Sequelize } = require('sequelize');
 
-// const sequelize = new Sequelize('chat_app', 'root', '', {
-//   host: 'localhost',
-//   dialect: 'mysql',
-// });
+const sequelize = new Sequelize('chat_app', 'root', '', {
+  host: 'localhost',
+  dialect: 'mysql',
+});
 
-// module.exports = sequelize;
+module.exports = sequelize;
 
+// =============================================================
 
 // const { Sequelize } = require('sequelize');
 // require('dotenv').config();  // Asegúrate de cargar las variables de entorno
@@ -24,18 +25,20 @@
 
 // module.exports = sequelize;
 
-const { Sequelize } = require('sequelize');
-require('dotenv').config();  // Asegúrate de cargar las variables de entorno
+// -------------------------------------------------------------
 
-const sequelize = new Sequelize(
-  'chat_app',    // Nombre de la base de datos
-  'admin',        // Usuario de la base de datos
-  'Dryan250303',    // Contraseña de la base de datos
-  {
-    host: 'database-1.ctkki2usirrr.us-east-2.rds.amazonaws.com', // Host de la base de datos
-    dialect: 'mysql',            // Dialecto de la base de datos
-    port: '3306'  // Puerto de la base de datos
-  }
-);
+// const { Sequelize } = require('sequelize');
+// require('dotenv').config();  // Asegúrate de cargar las variables de entorno
 
-module.exports = sequelize;
+// const sequelize = new Sequelize(
+//   'chat_app',    // Nombre de la base de datos
+//   'admin',        // Usuario de la base de datos
+//   'Dryan250303',    // Contraseña de la base de datos
+//   {
+//     host: 'database-1.ctkki2usirrr.us-east-2.rds.amazonaws.com', // Host de la base de datos
+//     dialect: 'mysql',            // Dialecto de la base de datos
+//     port: '3306'  // Puerto de la base de datos
+//   }
+// );
+
+// module.exports = sequelize;

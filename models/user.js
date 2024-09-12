@@ -23,7 +23,7 @@ const User = sequelize.define('User', {
   },
 }, {
   timestamps: false,
-  tableName: 'users', // Nombre explícito de la tabla en la base de datos
+  tableName: 'users',
 });
 
 module.exports = User;

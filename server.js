@@ -4,17 +4,20 @@ const cors = require('cors');
 const messagesRouter = require('./routes/messages');
 const usersRouter = require('./routes/user');
 const openaiRouter = require('./routes/openai');
+const activityRouter = require('./routes/activity'); // Importa el nuevo router de actividades
 const sequelize = require('./config/database'); // Importa la configuración de Sequelize
 const { User, Message } = require('./models');  // Importa los modelos
 
 const app = express();
-const PORT = process.env.PORT || 80;
+// const PORT = process.env.PORT || 80;
+const PORT = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(bodyParser.json());
 app.use('/api', messagesRouter);
 app.use('/api', usersRouter);
 app.use('/api', openaiRouter);
+app.use('/api', activityRouter);
 
 // Sincroniza los modelos con la base de datos
 sequelize.sync({ force: false })  // Cambia force a true si quieres recrear las tablas en cada inicio

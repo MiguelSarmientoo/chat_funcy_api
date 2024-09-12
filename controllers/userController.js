@@ -1,12 +1,31 @@
-// controllers/userController.js
 const { User } = require('../models');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
 
-async function getUserByUsernameAndPassword(username, password) {
+async function login(req, res) {
+  const { username, password } = req.body;
+
   try {
-    const user = await User.findOne({ where: { username, password } });
-    return user;
+    const user = await User.findOne({ where: { username } });
+    
+    if (!user) {
+      return res.status(401).json({ error: 'Credenciales inválidas' });
+    }
+
+    // Verificar la contraseña con bcrypt
+    const isMatch = await bcrypt.compare(password, user.password);
+
+    if (!isMatch) {
+      return res.status(401).json({ error: 'Credenciales inválidas' });
+    }
+
+    // Generar el token JWT
+    const token = jwt.sign({ userId: user.id, username: user.username }, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+    res.status(200).json({ message: 'Login exitoso', token });
   } catch (error) {
-    throw error;
+    console.error('Error en el login:', error);
+    res.status(500).json({ error: 'Error interno del servidor' });
   }
 }
 
@@ -14,9 +33,12 @@ async function createUser(req, res) {
   const { username, password, email } = req.body;
 
   try {
+    // Encriptar la contraseña con bcrypt
+    const hashedPassword = await bcrypt.hash(password, 10);
+
     const user = await User.create({
       username,
-      password,
+      password: hashedPassword, // Guardar la contraseña encriptada
       email,
       created_at: new Date()
     });
@@ -39,7 +61,7 @@ async function getAllUsers(req, res) {
 }
 
 module.exports = {
-  getUserByUsernameAndPassword,
+  login,
   createUser,
-  getAllUsers
+  getAllUsers,
 };

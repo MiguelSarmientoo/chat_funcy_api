@@ -40,32 +40,67 @@ async function saveMessageFromBot(req, res) {
   }
 }
 
+// const getFilteredMessages = async (req, res) => {
+//   const userId = parseInt(req.query.userId); // Obtiene userId del query params
+//   console.log('userId recibido:', userId); // Imprime el valor de userId en la terminal
+
+//   try {
+//     if (isNaN(userId)) {
+//       return res.status(400).json({ error: 'userId debe ser un número válido.' });
+//     }
+
+//     // Consulta para filtrar los mensajes
+//     const messages = await Message.findAll({
+//       where: {
+//         [Op.or]: [
+//           { user_id: userId, user_id_receptor: 1 }, // Mensajes enviados por userId y recibidos por user_id_receptor = 1
+//           { user_id: 1, user_id_receptor: userId }  // Mensajes enviados por user_id = 1 y recibidos por user_id_receptor = userId
+//         ]
+//       }
+//     });
+
+//     // Convertir las fechas UTC a la zona horaria de Lima
+//     const messagesWithLocalTime = messages.map(message => {
+//       const utcDate = moment.utc(message.created_at); // Crear un objeto moment en UTC
+//       const zonedDate = utcDate.tz(timeZone); // Convertir a zona horaria local
+//       return {
+//         ...message.toJSON(),
+//         created_at: zonedDate.format('YYYY-MM-DD HH:mm:ss') // Formatear la fecha
+//       };
+//     });
+
+//     res.status(200).json(messagesWithLocalTime);
+//   } catch (error) {
+//     console.error('Error fetching filtered messages:', error);
+//     res.status(500).json({ error: 'Error fetching filtered messages' });
+//   }
+// };
+
+
 const getFilteredMessages = async (req, res) => {
-  const userId = parseInt(req.query.userId); // Obtiene userId del query params
-  console.log('userId recibido:', userId); // Imprime el valor de userId en la terminal
+  const userId = parseInt(req.query.userId);
+  const limit = parseInt(req.query.limit) || 20;  // Número de mensajes por lote
+  const offset = parseInt(req.query.offset) || 0; // Desplazamiento inicial
 
   try {
-    if (isNaN(userId)) {
-      return res.status(400).json({ error: 'userId debe ser un número válido.' });
-    }
-
-    // Consulta para filtrar los mensajes
     const messages = await Message.findAll({
       where: {
         [Op.or]: [
-          { user_id: userId, user_id_receptor: 1 }, // Mensajes enviados por userId y recibidos por user_id_receptor = 1
-          { user_id: 1, user_id_receptor: userId }  // Mensajes enviados por user_id = 1 y recibidos por user_id_receptor = userId
+          { user_id: userId, user_id_receptor: 1 },
+          { user_id: 1, user_id_receptor: userId }
         ]
-      }
+      },
+      order: [['created_at', 'DESC']],
+      limit,
+      offset
     });
 
-    // Convertir las fechas UTC a la zona horaria de Lima
     const messagesWithLocalTime = messages.map(message => {
-      const utcDate = moment.utc(message.created_at); // Crear un objeto moment en UTC
-      const zonedDate = utcDate.tz(timeZone); // Convertir a zona horaria local
+      const utcDate = moment.utc(message.created_at);
+      const zonedDate = utcDate.tz(timeZone);
       return {
         ...message.toJSON(),
-        created_at: zonedDate.format('YYYY-MM-DD HH:mm:ss') // Formatear la fecha
+        created_at: zonedDate.format('YYYY-MM-DD HH:mm:ss')
       };
     });
 
