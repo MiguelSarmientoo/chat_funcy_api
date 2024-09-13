@@ -1,6 +1,11 @@
 const sequelize = require('../config/database'); // Asegúrate de que sequelize esté importado
 const User = require('./user');
 const Message = require('./message');
+const AgeRange = require('./ageRange');
+const HierarchicalLevel = require('./hierarchicalLevel');
+const ResponsabilityLevel = require('./responsabilityLevel');
+const Gender = require('./gender');
+
 
 // Definir las asociaciones
 User.hasMany(Message, { foreignKey: 'user_id' });
@@ -20,4 +25,8 @@ sequelize.sync()
 module.exports = {
   User,
   Message,
+  AgeRange,
+  HierarchicalLevel,
+  ResponsabilityLevel,
+  Gender
 };

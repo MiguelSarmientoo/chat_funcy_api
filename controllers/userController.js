@@ -14,6 +14,7 @@ async function login(req, res) {
 
     // Verificar la contraseña con bcrypt
     const isMatch = await bcrypt.compare(password, user.password);
+    
 
     if (!isMatch) {
       return res.status(401).json({ error: 'Credenciales inválidas' });
