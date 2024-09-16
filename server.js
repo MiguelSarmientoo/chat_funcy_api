@@ -1,34 +1,39 @@
+// server.js
 const express = require('express');
 const bodyParser = require('body-parser');
-const cors = require('cors'); 
+const cors = require('cors');
 const messagesRouter = require('./routes/messages');
 const usersRouter = require('./routes/user');
 const openaiRouter = require('./routes/openai');
-const activityRouter = require('./routes/activity'); // Importa el nuevo router de actividades
+const activityRouter = require('./routes/activity');
 const sequelize = require('./config/database'); // Importa la configuración de Sequelize
 const maintanceRouter = require('./routes/maintance');
+const userResponsesRouter = require('./routes/userResponses'); // Importa el router de userResponses
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Configuración de CORS (opcional)
+// Configuración de CORS
 const corsOptions = {
-  origin: 'http://localhost:51185', // Asegúrate de que esto sea el origen correcto de tu frontend
+  origin: '*',
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  credentials: true, // Permite encabezados de autenticación y cookies
+  credentials: true,
   optionsSuccessStatus: 204
 };
 
-app.use(cors(corsOptions)); // Usa las opciones de CORS
+app.use(cors(corsOptions));
 app.use(bodyParser.json());
+
+// Rutas de la API
 app.use('/api', messagesRouter);
 app.use('/api', usersRouter);
 app.use('/api', openaiRouter);
 app.use('/api', activityRouter);
 app.use('/api/v1/maintance', maintanceRouter);
+app.use('/api', userResponsesRouter); // Añade esta línea para userResponses
 
 // Sincroniza los modelos con la base de datos
-sequelize.sync({ force: false })  // Cambia force a true si quieres recrear las tablas en cada inicio
+sequelize.sync({ force: false })
   .then(() => {
     console.log('Base de datos sincronizada');
   })

@@ -1,3 +1,4 @@
+//userController.js
 const { User } = require('../models');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
@@ -15,7 +16,6 @@ async function login(req, res) {
     // Verificar la contraseña con bcrypt
     const isMatch = await bcrypt.compare(password, user.password);
     
-
     if (!isMatch) {
       return res.status(401).json({ error: 'Credenciales inválidas' });
     }
@@ -23,7 +23,8 @@ async function login(req, res) {
     // Generar el token JWT
     const token = jwt.sign({ userId: user.id, username: user.username }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
-    res.status(200).json({ message: 'Login exitoso', token });
+    // Enviar el token y el ID del usuario
+    res.status(200).json({ message: 'Login exitoso', token, user: { id: user.id, username: user.username } });
   } catch (error) {
     console.error('Error en el login:', error);
     res.status(500).json({ error: 'Error interno del servidor' });

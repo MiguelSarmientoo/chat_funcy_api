@@ -1,3 +1,5 @@
+//activityController.js
+
 const connection = require('../config/database');  // Asegúrate de que la ruta sea correcta
 
 // Agregar una actividad

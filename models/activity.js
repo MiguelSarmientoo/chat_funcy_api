@@ -17,7 +17,7 @@ const Activity = sequelize.define('Activity', {
   }
 }, {
   tableName: 'activities',
-  timestamps: false  // Si no tienes columnas createdAt/updatedAt en tu tabla
+  timestamps: false
 });
 
 module.exports = Activity;
